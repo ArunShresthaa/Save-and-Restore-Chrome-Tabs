@@ -1,0 +1,30 @@
+{
+	"manifest_version": 2,
+	"name": "Tab Exporter",
+	"version": "1.0",
+	"description": "Export and Restore current chrome tabs.",
+	"author": "Arun Shrestha",
+	"permissions": [
+		"storage",
+		"tabs",
+		"notifications"
+	],
+	"browser_action": {
+		"default_icon": "icon.png",
+		"default_popup": "popup.html",
+		"default_title": "Tab Exporter"
+	},
+	"icons": {
+		"48": "icon.png"
+	},
+	"content_scripts": [
+		{
+			"matches": [
+				"<all_urls>"
+			],
+			"js": [
+				"content.js"
+			]
+		}
+	]
+}
