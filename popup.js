@@ -38,6 +38,36 @@ document.addEventListener("DOMContentLoaded", function () {
 		});
 	});
 
+	// Download Tabs button
+	document.getElementById("downloadBtn").addEventListener("click", function () {
+		chrome.storage.sync.get("tabLinksText", function (data) {
+			const tabLinksText = data.tabLinksText;
+
+			if (!tabLinksText) {
+				console.error("No tab links found in storage.");
+				return;
+			}
+
+			// Create a Blob containing the text
+			const blob = new Blob([tabLinksText], { type: "text/plain" });
+
+			// Generate filename with the format "Tab_Links_yearY_monthM_dayD_hourH_minutesM_secondS.txt"
+			const now = new Date();
+			const filename = `TabLinks__${now.getFullYear()}-${padZero(now.getMonth() + 1)}-${padZero(now.getDate())}__${padZero(now.getHours())};${padZero(now.getMinutes())};${padZero(now.getSeconds())}.txt`;
+
+			// Create a link element and click it to trigger the download
+			const a = document.createElement("a");
+			a.href = URL.createObjectURL(blob);
+			a.download = filename;
+			document.body.appendChild(a);
+			a.click();
+
+			// Cleanup
+			document.body.removeChild(a);
+		});
+		// showNotification("Download Successful", "Tab links downloaded successfully.");
+	});
+
 	// Function to show notification
 	function showNotification(title, message) {
 		chrome.notifications.create({
@@ -46,5 +76,10 @@ document.addEventListener("DOMContentLoaded", function () {
 			title: title,
 			message: message
 		});
+	}
+
+	// Function to pad a number with leading zeros
+	function padZero(num) {
+		return num.toString().padStart(2, '0');
 	}
 });
