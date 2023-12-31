@@ -36,6 +36,22 @@
 			background-color: #e74c3c;
 			/* Alizarin red color */
 		}
+
+		#filenameInput {
+			padding: 5px;
+			margin: 5px;
+			border: 1px solid #ccc;
+			border-radius: 5px;
+			font-size: 14px;
+		}
+
+		#helpBtn {
+			background-color: #f39c12;
+			/* Sunflower yellow color */
+			position: absolute;
+			top: 18px;
+			right: 10px;
+		}
 	</style>
 	<script src="popup.js"></script>
 </head>
@@ -43,7 +59,9 @@
 <body>
 	<button id="exportBtn">Save Tabs</button>
 	<button id="restoreBtn">Restore Tabs</button>
+	<input type="text" id="filenameInput" placeholder="Enter Custom Filename">
 	<button id="downloadBtn">Download Tabs</button>
+	<button id="helpBtn">?</button>
 </body>
 
 </html>

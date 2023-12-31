@@ -40,11 +40,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	// Download Tabs button
 	document.getElementById("downloadBtn").addEventListener("click", function () {
-		chrome.storage.sync.get("tabLinksText", function (data) {
-			const tabLinksText = data.tabLinksText;
+		chrome.tabs.query({}, function (tabs) {
+			const filenameInput = document.getElementById("filenameInput");
+			const customFilename = filenameInput.value.trim();
+			const tabLinks = tabs.map(tab => tab.url);
+			const tabLinksText = tabLinks.join('\n');
 
 			if (!tabLinksText) {
-				console.error("No tab links found in storage.");
+				console.error("No opened tabs.");
 				return;
 			}
 
@@ -53,8 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 			// Generate filename with the format "Tab_Links_yearY_monthM_dayD_hourH_minutesM_secondS.txt"
 			const now = new Date();
-			const filename = `TabLinks__${now.getFullYear()}-${padZero(now.getMonth() + 1)}-${padZero(now.getDate())}__${padZero(now.getHours())};${padZero(now.getMinutes())};${padZero(now.getSeconds())}.txt`;
-
+			const filename = `${customFilename}__${now.getFullYear()}-${padZero(now.getMonth() + 1)}-${padZero(now.getDate())}__${padZero(now.getHours())};${padZero(now.getMinutes())};${padZero(now.getSeconds())}.txt`;
 			// Create a link element and click it to trigger the download
 			const a = document.createElement("a");
 			a.href = URL.createObjectURL(blob);
@@ -65,7 +67,6 @@ document.addEventListener("DOMContentLoaded", function () {
 			// Cleanup
 			document.body.removeChild(a);
 		});
-		// showNotification("Download Successful", "Tab links downloaded successfully.");
 	});
 
 	// Function to show notification
@@ -82,4 +83,10 @@ document.addEventListener("DOMContentLoaded", function () {
 	function padZero(num) {
 		return num.toString().padStart(2, '0');
 	}
+
+	// Help button
+	document.getElementById("helpBtn").addEventListener("click", function () {
+		// Open the help.html in a new tab
+		chrome.tabs.create({ url: chrome.runtime.getURL("help.html") });
+	});
 });
